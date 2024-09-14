@@ -1,2 +1,4 @@
 .venv
 docker
+src/__pycache__/
+gungeon.egg-info

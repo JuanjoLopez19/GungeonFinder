@@ -1,8 +1,8 @@
-from src.models.items import Items
+from src.models.Shrines import Shrines
 from src.scrapper import AbstractScrapper
 
 
-class ItemScrapper(AbstractScrapper):
+class ShrinesScrapper(AbstractScrapper):
     def __init__(self, url: str) -> None:
         super().__init__(url)
         temp = self.get_url()
@@ -21,6 +21,6 @@ class ItemScrapper(AbstractScrapper):
         items = []
         for i, item in enumerate(tr):
             try:
-                items.append(Items(i, *item.find_all("td")))
+                items.append(Shrines(i, *item.find_all("td")))
             except ValueError as e:
                 self.logger.error(e)
