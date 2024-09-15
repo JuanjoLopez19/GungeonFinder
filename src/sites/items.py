@@ -18,9 +18,11 @@ class ItemScrapper(AbstractScrapper):
         tbody = self.parsed_data.find("tbody")
         tr = tbody.find_all("tr")[1:]
 
-        items = []
+        items: list[Items] = []
         for i, item in enumerate(tr):
             try:
                 items.append(Items(i, *item.find_all("td")))
             except ValueError as e:
                 self.logger.error(e)
+
+        return items

@@ -23,7 +23,7 @@ def requirements(filename):
 
 
 setup(
-    name="gungeon",
+    name="GungeonFinder",
     version="1.0",
     packages=find_packages(),
     license="LICENSE.md",
@@ -35,7 +35,7 @@ setup(
     install_requires=requirements(filename="src/requirements.txt"),
     data_files=[],
     entry_points={
-        "console_scripts": ["gungeon=src.main:main"],
+        "console_scripts": ["GungeonFinder=src.main:main"],
     },
     include_package_data=True,
     classifiers=[
