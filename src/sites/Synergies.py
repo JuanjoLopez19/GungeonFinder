@@ -16,16 +16,20 @@ class SynergiesScrapper(AbstractScrapper):
         else:
             self.logger.error("Error parsing the website")
 
-    def get_data(self, guns_list: list[Guns] = None, items_list: list[Items] = None):
+    def get_data(
+        self,
+    ):
         """
         Get data from the website
         """
 
         # Synergies(0, *tr[0].find_all("td"))
         items: list[Synergies] = []
-        for i, item in enumerate(self.parsed_data):
+        for i, tr in enumerate(self.parsed_data):
             try:
-                items.append(Synergies(i, *item.find_all("td")))
+                items.append(
+                    Synergies(i, *[td for td in tr.contents if td.name == "td"])
+                )
             except ValueError as e:
                 self.logger.error(e)
 
