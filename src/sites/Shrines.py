@@ -1,13 +1,13 @@
-from src.models.items import Items
+from src.models.Shrines import Shrines
 from src.scrapper import AbstractScrapper
 
 
-class ItemScrapper(AbstractScrapper):
+class ShrinesScrapper(AbstractScrapper):
     def __init__(self, url: str) -> None:
         super().__init__(url)
         temp = self.get_url()
         if temp:
-            self.parsed_data = temp.find("table", class_="wikitable")
+            self.parsed_data = temp.select("table.wikitable > tbody > tr")[1:]
         else:
             self.logger.error("Error parsing the website")
 
@@ -15,14 +15,10 @@ class ItemScrapper(AbstractScrapper):
         """
         Get data from the website
         """
-        tbody = self.parsed_data.find("tbody")
-        tr = tbody.find_all("tr")[1:]
 
-        items: list[Items] = []
-        for i, item in enumerate(tr):
+        items: list[Shrines] = []
+        for i, item in enumerate(self.parsed_data):
             try:
-                items.append(Items(i, *item.find_all("td")))
+                items.append(Shrines(i, *item.find_all("td")))
             except ValueError as e:
                 self.logger.error(e)
-
-        return items

@@ -1,2 +1,5 @@
 .venv
 docker
+
+GungeonFinder.egg-info
+src/**/*.pyc
