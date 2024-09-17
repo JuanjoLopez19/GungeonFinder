@@ -1,5 +1,7 @@
 .venv
 docker
-
+.env
 GungeonFinder.egg-info
 src/**/*.pyc
+
+__pycache__/*

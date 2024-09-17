@@ -29,3 +29,29 @@ class Guns:
 
     def __str__(self) -> str:
         return f"{self.name} - {self.icon} - {self.notes} - {self.quality} - {self.gun_type} - {self.dps} - {self.magazine_size} - {self.ammo_capacity} - {self.damage}"
+
+    def dump(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "icon": self.icon,
+            "notes": self.notes,
+            "quality": self.quality,
+            "gun_type": self.gun_type,
+            "dps": self.dps,
+            "magazine_size": self.magazine_size,
+            "ammo_capacity": self.ammo_capacity,
+            "damage": self.damage,
+            "type": "gun",
+        }
+
+    @staticmethod
+    def parse_index():
+        return {
+            "name": "guns",
+            "body": {
+                "name": {"type": "search_as_you_type"},
+                "notes": {"type": "search_as_you_type"},
+                "type": {"type": "keyword"},
+            },
+        }

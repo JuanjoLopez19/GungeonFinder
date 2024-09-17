@@ -33,4 +33,10 @@ class GunsScrapper(AbstractScrapper):
                 except ValueError as e:
                     self.logger.error(e)
 
-        return items
+        self.items = items
+
+    def bulk_insert(self):
+        return [
+            {"_index": Guns.parse_index().get("name"), "_source": item.dump()}
+            for item in self.items
+        ]

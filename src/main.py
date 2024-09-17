@@ -1,15 +1,51 @@
 import os
 
-from src.config import load
-from src.sites.Guns import GunsScrapper
-from src.sites.items import ItemScrapper
-from src.sites.Shrines import ShrinesScrapper
-from src.sites.Synergies import SynergiesScrapper
+import elasticsearch.helpers as helpers
+import wx
+
+from src.models.Guns import Guns
+from src.models.items import Items
+from src.models.Shrines import Shrines
+from src.models.Synergies import Synergies
+from src.ui.root import GungeonFinderApp
+
+from . import client, gunsScrapper, itemsScrapper, shrinesScrapper, synergiesScrapper
 
 
 def main():
-    load()
-    ItemScrapper(os.getenv("ROOT_URL").format("Items")).get_data()
-    ShrinesScrapper(os.getenv("ROOT_URL").format("Shrines")).get_data()
-    GunsScrapper(os.getenv("ROOT_URL").format("Guns")).get_data()
-    SynergiesScrapper(os.getenv("ROOT_URL").format("Synergies")).get_data()
+
+    # if client.test_connection():
+    #     if client.list_indexes() == {}:
+    #         client.create_index(
+    #             Guns.parse_index().get("name"), Guns.parse_index().get("body")
+    #         )
+    #         client.create_index(
+    #             Items.parse_index().get("name"), Items.parse_index().get("body")
+    #         )
+    #         client.create_index(
+    #             Synergies.parse_index().get("name"), Synergies.parse_index().get("body")
+    #         )
+    #         client.create_index(
+    #             Shrines.parse_index().get("name"), Shrines.parse_index().get("body")
+    #         )
+
+    #         itemsScrapper.get_data()
+    #         client.bulk_insert(itemsScrapper.bulk_insert())
+
+    #         gunsScrapper.get_data()
+    #         client.bulk_insert(gunsScrapper.bulk_insert())
+
+    #         shrinesScrapper.get_data()
+    #         client.bulk_insert(shrinesScrapper.bulk_insert())
+
+    #         synergiesScrapper.get_data()
+    #         client.bulk_insert(synergiesScrapper.bulk_insert())
+
+    #     print(client.search("gun"))
+
+    # else:
+    #     print("Connection to ElasticSearch failed.")
+    #     return
+    app = wx.App(useBestVisual=True)
+    GungeonFinderApp(None, title="Gungeon Finder").Show()
+    app.MainLoop()

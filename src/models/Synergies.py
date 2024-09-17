@@ -45,3 +45,23 @@ class Synergies:
         temp.extend([item.text.strip().replace("\n", "") for item in auxiliary_items])
         self.synergy = ", ".join(temp)
         self.effect = effect.text.strip().replace("\n", "")
+
+    def dump(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "synergy": self.synergy,
+            "effect": self.effect,
+            "type": "synergy",
+        }
+
+    @staticmethod
+    def parse_index():
+        return {
+            "name": "synergies",
+            "body": {
+                "name": {"type": "search_as_you_type"},
+                "effect": {"type": "search_as_you_type"},
+                "synergy": {"type": "search_as_you_type"},
+            },
+        }
