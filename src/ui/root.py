@@ -9,7 +9,6 @@ from src import client
 class GungeonFinderApp(wx.Frame):
     def __init__(self, parent, title):
         super(GungeonFinderApp, self).__init__(parent, title=title, size=(700, 450))
-
         self.initialize_ui()
         self.set_custom_icon()
 
@@ -21,10 +20,6 @@ class GungeonFinderApp(wx.Frame):
         icon.CopyFromBitmap(
             wx.Bitmap(wx.Image(icon_stream).Scale(32, 32, wx.IMAGE_QUALITY_HIGH))
         )
-        self.SetIcon(icon)
-
-        wx.ICONIZE = icon
-
         self.SetIcon(icon)
 
     def initialize_ui(self):
@@ -39,14 +34,23 @@ class GungeonFinderApp(wx.Frame):
         self.entry.Bind(wx.EVT_TEXT, self.on_text_change)
         vbox.Add(self.entry, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=20)
 
+        self.result_list = wx.ListBox(panel)  # Un ListBox para mostrar los resultados
+        vbox.Add(self.result_list, proportion=1, flag=wx.EXPAND | wx.ALL, border=20)
+
         panel.SetSizer(vbox)
 
     def on_text_change(self, event):
-        # Este método se llama cada vez que se introduce un carácter en el campo de entrada
-        print("Texto cambiado:", self.entry.GetValue())
-        event.Skip()  # Importante para no detener el flujo de eventos
+        # Limpiar resultados anteriores
+        self.result_list.Clear()
 
-        res = client.search(self.entry.GetValue())
+        # Consultar a Elasticsearch y actualizar el ListBox
+        if self.entry.GetValue():  # Asegurarse de no hacer una consulta vacía
+            res = client.search(
+                self.entry.GetValue()
+            )  # Suponiendo que esto devuelve una lista de diccionarios
+            for hit in res:
+                self.result_list.Append(
+                    hit["name"]
+                )  # Asumiendo que cada hit tiene un campo "name"
 
-        for hit in res:
-            print(hit["name"])
+        event.Skip()  # Permitir que otros manejadores de eventos procesen el evento
