@@ -1,0 +1,21 @@
+services:
+  elasticsearch:
+    container_name: ${PROJECT_NAME}_elastic
+    image: elasticsearch:8.14.1
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
+    ports:
+      - ${ELASTIC_PORT}:9200
+    volumes:
+      - ./docker/elastic/elastic.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - elastic-data:/usr/share/elasticsearch/data
+    networks:
+      - gungeonFinder-network
+
+networks:
+  gungeonFinder-network:
+    driver: bridge
+volumes:
+  elastic-data:
+    driver: local

@@ -21,8 +21,20 @@ class Items:
             "id": self.id,
             "icon": self.icon,
             "name": self.name,
-            "type": self.type,
+            "utility": self.type,
             "description": self.description,
             "quality": self.quality,
             "effect": self.effect,
+            "type": "item",
+        }
+
+    @staticmethod
+    def parse_index():
+        return {
+            "name": "items",
+            "body": {
+                "name": {"type": "search_as_you_type"},
+                "description": {"type": "search_as_you_type"},
+                "type": {"type": "keyword"},
+            },
         }

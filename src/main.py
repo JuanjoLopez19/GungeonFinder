@@ -1,15 +1,11 @@
-import os
+import wx
 
-from src.config import load
-from src.sites.Guns import GunsScrapper
-from src.sites.items import ItemScrapper
-from src.sites.Shrines import ShrinesScrapper
-from src.sites.Synergies import SynergiesScrapper
+from src.ui.root import GungeonFinderApp
 
 
 def main():
-    load()
-    ItemScrapper(os.getenv("ROOT_URL").format("Items")).get_data()
-    ShrinesScrapper(os.getenv("ROOT_URL").format("Shrines")).get_data()
-    GunsScrapper(os.getenv("ROOT_URL").format("Guns")).get_data()
-    SynergiesScrapper(os.getenv("ROOT_URL").format("Synergies")).get_data()
+    app = wx.App(useBestVisual=True)
+    gui = GungeonFinderApp(None, title="Gungeon Finder")
+    gui.Center()
+    gui.Show()
+    app.MainLoop()

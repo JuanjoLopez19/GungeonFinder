@@ -22,3 +22,11 @@ class ShrinesScrapper(AbstractScrapper):
                 items.append(Shrines(i, *item.find_all("td")))
             except ValueError as e:
                 self.logger.error(e)
+
+        self.items = items
+
+    def bulk_insert(self):
+        return [
+            {"_index": Shrines.parse_index().get("name"), "_source": item.dump()}
+            for item in self.items
+        ]

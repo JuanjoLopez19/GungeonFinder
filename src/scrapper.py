@@ -26,7 +26,3 @@ class AbstractScrapper(ABC):
         )
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
-
-    @abstractmethod
-    def get_data(self):
-        pass

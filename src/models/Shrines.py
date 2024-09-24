@@ -42,3 +42,24 @@ class Shrines:
                     f"{temp[0].text.strip()}: {temp[1].text.strip()} - {temp[2].text.strip()}: {temp[3].text.strip()}"
                 )
         return ", ".join(aux)
+
+    def dump(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "icon": self.icon,
+            "description": self.description,
+            "effect": self.effect,
+            "type": "shrine",
+        }
+
+    @staticmethod
+    def parse_index():
+        return {
+            "name": "shrines",
+            "body": {
+                "name": {"type": "search_as_you_type"},
+                "description": {"type": "search_as_you_type"},
+                "type": {"type": "keyword"},
+            },
+        }
