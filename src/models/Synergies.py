@@ -62,6 +62,6 @@ class Synergies:
             "body": {
                 "name": {"type": "search_as_you_type"},
                 "effect": {"type": "search_as_you_type"},
-                "synergy": {"type": "search_as_you_type"},
+                "type": {"type": "search_as_you_type"},
             },
         }

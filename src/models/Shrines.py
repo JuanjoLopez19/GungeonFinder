@@ -43,6 +43,16 @@ class Shrines:
                 )
         return ", ".join(aux)
 
+    def dump(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "icon": self.icon,
+            "description": self.description,
+            "effect": self.effect,
+            "type": "shrine",
+        }
+
     @staticmethod
     def parse_index():
         return {
@@ -52,14 +62,4 @@ class Shrines:
                 "description": {"type": "search_as_you_type"},
                 "type": {"type": "keyword"},
             },
-        }
-
-    def dump(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "icon": self.icon,
-            "description": self.description,
-            "effect": self.effect,
-            "type": "shrine",
         }
