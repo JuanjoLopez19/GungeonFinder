@@ -1,17 +1,21 @@
-from io import BytesIO
 import json
+import os
+import webbrowser
+from io import BytesIO
 
 import requests
 import wx
-import os
-
 from wx.core import CommandEvent
+
 from src import client
+
+from src.ui.dialog import Modal
 
 
 class GungeonFinderApp(wx.Frame):
     def __init__(self, parent, title):
         super(GungeonFinderApp, self).__init__(parent, title=title, size=(700, 450))
+        self.setToolbar()
         self.initialize_ui()
         self.set_custom_icon()
         self.image_dict = {}
@@ -25,6 +29,36 @@ class GungeonFinderApp(wx.Frame):
             wx.Bitmap(wx.Image(icon_stream).Scale(32, 32, wx.IMAGE_QUALITY_HIGH))
         )
         self.SetIcon(icon)
+
+    def setToolbar(self):
+        menu_bar = wx.MenuBar()
+        file_menu = wx.Menu()
+
+        qmi = wx.MenuItem(file_menu, 1, "&Quit\tCtrl+Q")
+        qmi.SetBitmap(
+            wx.Bitmap(
+                wx.Image(
+                    os.path.join(os.getcwd(), "src", "assets", "img", "quit.png")
+                ).Scale(12, 12, wx.IMAGE_QUALITY_HIGH)
+            )
+        )
+        file_menu.Append(qmi)
+
+        temp = wx.MenuItem(file_menu, 2, "&open Wiki\tCtrl+O")
+        temp.SetBitmap(
+            wx.Bitmap(
+                wx.Image(
+                    os.path.join(os.getcwd(), "src", "assets", "img", "browser.jpg")
+                ).Scale(12, 12, wx.IMAGE_QUALITY_HIGH)
+            )
+        )
+        file_menu.Append(temp)
+
+        self.Bind(wx.EVT_MENU, self.on_exit, id=1)
+        self.Bind(wx.EVT_MENU, self.on_open_wiki, id=2)
+
+        menu_bar.Append(file_menu, "&File")
+        self.SetMenuBar(menu_bar)
 
     def initialize_ui(self):
         panel = wx.Panel(self)
@@ -144,6 +178,12 @@ class GungeonFinderApp(wx.Frame):
     def on_exit(self, event: CommandEvent):
         self.Close()
 
+    def on_open_wiki(self, event: CommandEvent):
+        print("Opening the wiki")
+
+        webbrowser.open("https://enterthegungeon.gamepedia.com/Enter_the_Gungeon_Wiki")
+        event.Skip()
+
     def on_text_change(self, event: CommandEvent):
         self.list_ctrl.DeleteAllItems()
         handler = {
@@ -192,10 +232,10 @@ class GungeonFinderApp(wx.Frame):
 
             event.Skip()
 
-    # TODO manage the tooltip and format the data in a better way
     def on_listbox_click(self, event: CommandEvent):
         handler = {
             "gun": lambda x: {
+                "icon": x["icon"],
                 "name": x["name"],
                 "description": x["notes"],
                 "quality": x["quality"],
@@ -204,22 +244,29 @@ class GungeonFinderApp(wx.Frame):
                 "magazine_size": x["magazine_size"],
                 "ammo_capacity": x["ammo_capacity"],
                 "damage": x["damage"],
+                "type": x["type"],
             },
             "item": lambda x: {
+                "icon": x["icon"],
                 "name": x["name"],
                 "description": x["description"],
                 "utility": x["utility"],
                 "quality": x["quality"],
+                "type": x["type"],
                 "effect": x["effect"],
             },
             "shrine": lambda x: {
+                "icon": x["icon"],
                 "name": x["name"],
                 "description": x["description"],
+                "type": x["type"],
                 "effect": x["effect"],
             },
             "synergy": lambda x: {
+                "icon": "",
                 "name": x["name"],
                 "description": x["effect"],
+                "type": x["type"],
                 "items": x["synergy"],
             },
         }
@@ -227,9 +274,11 @@ class GungeonFinderApp(wx.Frame):
         item = self.list_ctrl.GetItemText(selection, 1)
         res = client.search(item)[0]
 
-        tooltip_text = json.dumps(handler[res["type"]](res))
+        item = handler[res["type"]](res)
 
-        wx.TipWindow(self.list_ctrl, tooltip_text, maxLength=500)
+        dialog = Modal(self, title=item.get("name"), selection=item)
+        dialog.ShowModal()
+        dialog.Destroy()
 
         event.Skip()
 
