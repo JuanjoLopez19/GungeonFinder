@@ -40,3 +40,9 @@ class GunsScrapper(AbstractScrapper):
             {"_index": Guns.parse_index().get("name"), "_source": item.dump()}
             for item in self.items
         ]
+
+
+if __name__ == "__main__":
+    url = "https://enterthegungeon.gamepedia.com/Guns"
+    scrapper = GunsScrapper(url)
+    scrapper.get_data()
