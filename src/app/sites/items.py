@@ -1,5 +1,5 @@
-from src.models.items import Items
-from src.scrapper import AbstractScrapper
+from app.models.items import Items
+from app.scrapper import AbstractScrapper
 
 
 class ItemScrapper(AbstractScrapper):

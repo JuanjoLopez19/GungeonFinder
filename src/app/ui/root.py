@@ -7,9 +7,9 @@ import requests
 import wx
 from wx.core import CommandEvent
 
-from src import client
+from app import client
 
-from src.ui.dialog import Modal
+from app.ui.dialog import Modal
 
 
 class GungeonFinderApp(wx.Frame):
@@ -34,24 +34,28 @@ class GungeonFinderApp(wx.Frame):
         menu_bar = wx.MenuBar()
         file_menu = wx.Menu()
 
+        print(os.path.join(os.getcwd(), "assets", "img", "quit.png"))
+        print(os.path.exists(os.path.join(os.getcwd(), "assets", "img", "quit.png")))
         qmi = wx.MenuItem(file_menu, 1, "&Quit\tCtrl+Q")
-        qmi.SetBitmap(
-            wx.Bitmap(
-                wx.Image(
-                    os.path.join(os.getcwd(), "src", "assets", "img", "quit.png")
-                ).Scale(12, 12, wx.IMAGE_QUALITY_HIGH)
+        if os.path.exists(os.path.join(os.getcwd(), "assets", "img", "quit.png")):
+            qmi.SetBitmap(
+                wx.Bitmap(
+                    wx.Image(
+                        os.path.join(os.getcwd(), "assets", "img", "quit.png")
+                    ).Scale(12, 12, wx.IMAGE_QUALITY_HIGH)
+                )
             )
-        )
         file_menu.Append(qmi)
 
         temp = wx.MenuItem(file_menu, 2, "&open Wiki\tCtrl+O")
-        temp.SetBitmap(
-            wx.Bitmap(
-                wx.Image(
-                    os.path.join(os.getcwd(), "src", "assets", "img", "browser.jpg")
-                ).Scale(12, 12, wx.IMAGE_QUALITY_HIGH)
+        if os.path.exists(os.path.join(os.getcwd(), "assets", "img", "browser.jpg")):
+            temp.SetBitmap(
+                wx.Bitmap(
+                    wx.Image(
+                        os.path.join(os.getcwd(), "assets", "img", "browser.jpg")
+                    ).Scale(12, 12, wx.IMAGE_QUALITY_HIGH)
+                )
             )
-        )
         file_menu.Append(temp)
 
         self.Bind(wx.EVT_MENU, self.on_exit, id=1)
@@ -118,7 +122,7 @@ class GungeonFinderApp(wx.Frame):
         first_row = wx.BoxSizer(wx.HORIZONTAL)
         first_row.Add(
             self.render_image(
-                os.path.join(os.getcwd(), "src", "assets", "img", "error.png"),
+                os.path.join(os.getcwd(), "app", "assets", "img", "error.png"),
                 panel,
                 True,
                 *[50, 50],
@@ -208,7 +212,7 @@ class GungeonFinderApp(wx.Frame):
             },
             "synergy": lambda x: {
                 "icon": self.render_image(
-                    os.path.join(os.getcwd(), "src", "assets", "img", "not_found.png"),
+                    os.path.join(os.getcwd(), "assets", "img", "not_found.png"),
                     self.list_ctrl,
                     True,
                     *[25, 25, False],

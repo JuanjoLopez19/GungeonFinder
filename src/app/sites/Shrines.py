@@ -1,5 +1,5 @@
-from src.models.Shrines import Shrines
-from src.scrapper import AbstractScrapper
+from app.models.Shrines import Shrines
+from app.scrapper import AbstractScrapper
 
 
 class ShrinesScrapper(AbstractScrapper):

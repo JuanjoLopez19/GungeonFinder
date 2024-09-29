@@ -1,8 +1,8 @@
 import bs4
 from bs4 import ResultSet
 
-from src.models.Guns import Guns
-from src.scrapper import AbstractScrapper
+from app.models.Guns import Guns
+from app.scrapper import AbstractScrapper
 
 
 class GunsScrapper(AbstractScrapper):

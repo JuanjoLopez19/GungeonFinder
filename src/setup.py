@@ -10,7 +10,7 @@ from setuptools import find_packages, setup
 
 
 def readme():
-    with io.open("README.md", encoding="utf-8") as f:
+    with io.open("README.MD", encoding="utf-8") as f:
         return f.read()
 
 
@@ -32,10 +32,10 @@ setup(
     description="",
     long_description=readme(),
     long_description_content_type="text/markdown",
-    install_requires=requirements(filename="src/requirements.txt"),
+    install_requires=requirements(filename="app/requirements.txt"),
     data_files=[],
     entry_points={
-        "console_scripts": ["GungeonFinder=src.main:main"],
+        "console_scripts": ["GungeonFinder=app.main:main"],
     },
     include_package_data=True,
     classifiers=[
