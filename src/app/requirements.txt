@@ -5,5 +5,5 @@ elasticsearch
 tk
 kivy
 PyQt5
-wxPython
+# wxPython
 dearpygui

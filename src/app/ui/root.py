@@ -7,9 +7,9 @@ import requests
 import wx
 from wx.core import CommandEvent
 
-from src import client
+from app import client
 
-from src.ui.dialog import Modal
+from app.ui.dialog import Modal
 
 
 class GungeonFinderApp(wx.Frame):
@@ -34,30 +34,34 @@ class GungeonFinderApp(wx.Frame):
         menu_bar = wx.MenuBar()
         file_menu = wx.Menu()
 
+        print(os.path.join(os.getcwd(), "assets", "img", "quit.png"))
+        print(os.path.exists(os.path.join(os.getcwd(), "assets", "img", "quit.png")))
         qmi = wx.MenuItem(file_menu, 1, "&Quit\tCtrl+Q")
-        qmi.SetBitmap(
-            wx.Bitmap(
-                wx.Image(
-                    os.path.join(os.getcwd(), "src", "assets", "img", "quit.png")
-                ).Scale(12, 12, wx.IMAGE_QUALITY_HIGH)
+        if os.path.exists(os.path.join(os.getcwd(), "assets", "img", "quit.png")):
+            qmi.SetBitmap(
+                wx.Bitmap(
+                    wx.Image(
+                        os.path.join(os.getcwd(), "assets", "img", "quit.png")
+                    ).Scale(12, 12, wx.IMAGE_QUALITY_HIGH)
+                )
             )
-        )
         file_menu.Append(qmi)
 
         temp = wx.MenuItem(file_menu, 2, "&open Wiki\tCtrl+O")
-        temp.SetBitmap(
-            wx.Bitmap(
-                wx.Image(
-                    os.path.join(os.getcwd(), "src", "assets", "img", "browser.jpg")
-                ).Scale(12, 12, wx.IMAGE_QUALITY_HIGH)
+        if os.path.exists(os.path.join(os.getcwd(), "assets", "img", "browser.jpg")):
+            temp.SetBitmap(
+                wx.Bitmap(
+                    wx.Image(
+                        os.path.join(os.getcwd(), "assets", "img", "browser.jpg")
+                    ).Scale(12, 12, wx.IMAGE_QUALITY_HIGH)
+                )
             )
-        )
         file_menu.Append(temp)
 
         self.Bind(wx.EVT_MENU, self.on_exit, id=1)
         self.Bind(wx.EVT_MENU, self.on_open_wiki, id=2)
 
-        menu_bar.Append(file_menu, "&File")
+        menu_bar.Append(file_menu, "&Options")
         self.SetMenuBar(menu_bar)
 
     def initialize_ui(self):
@@ -98,14 +102,17 @@ class GungeonFinderApp(wx.Frame):
                 print(e)
         else:
             if image_path in self.image_dict:
-                return self.image_dict[image_path]
+                return self.image_dict[image_path].get("bitmap")
             else:
                 response = requests.get(image_path)
                 bytes_image = BytesIO(response.content)
                 image = wx.Image(bytes_image, wx.BITMAP_TYPE_ANY).Scale(
                     args[0], args[1], wx.IMAGE_LIST_NORMAL
                 )
-                self.image_dict[image_path] = wx.Bitmap(image)
+                self.image_dict[image_path] = {
+                    "bitmap": wx.Bitmap(image),
+                    "image": image,
+                }
                 return wx.Bitmap(image)
         bitmap = wx.StaticBitmap(panel, wx.ID_ANY, wx.Bitmap(image))
         return bitmap
@@ -115,7 +122,7 @@ class GungeonFinderApp(wx.Frame):
         first_row = wx.BoxSizer(wx.HORIZONTAL)
         first_row.Add(
             self.render_image(
-                os.path.join(os.getcwd(), "src", "assets", "img", "error.png"),
+                os.path.join(os.getcwd(), "app", "assets", "img", "error.png"),
                 panel,
                 True,
                 *[50, 50],
@@ -179,8 +186,6 @@ class GungeonFinderApp(wx.Frame):
         self.Close()
 
     def on_open_wiki(self, event: CommandEvent):
-        print("Opening the wiki")
-
         webbrowser.open("https://enterthegungeon.gamepedia.com/Enter_the_Gungeon_Wiki")
         event.Skip()
 
@@ -207,7 +212,7 @@ class GungeonFinderApp(wx.Frame):
             },
             "synergy": lambda x: {
                 "icon": self.render_image(
-                    os.path.join(os.getcwd(), "src", "assets", "img", "not_found.png"),
+                    os.path.join(os.getcwd(), "assets", "img", "not_found.png"),
                     self.list_ctrl,
                     True,
                     *[25, 25, False],
@@ -276,7 +281,12 @@ class GungeonFinderApp(wx.Frame):
 
         item = handler[res["type"]](res)
 
-        dialog = Modal(self, title=item.get("name"), selection=item)
+        dialog = Modal(
+            self,
+            title=item.get("name"),
+            selection=item,
+            item_icon=self.image_dict.get(item.get("icon"), None),
+        )
         dialog.ShowModal()
         dialog.Destroy()
 

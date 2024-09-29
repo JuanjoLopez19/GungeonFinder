@@ -13,6 +13,19 @@ services:
     networks:
       - gungeonFinder-network
 
+  app:
+    container_name: ${PROJECT_NAME}_app
+    build: ./src
+    depends_on:
+      - elasticsearch
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix # Mount the X11 socket
+      - ./docker/python/python.env:/app/.env
+    environment:
+      - DISPLAY=${DISPLAY} # Use host DISPLAY environment variable
+    networks:
+      - gungeonFinder-network
+
 networks:
   gungeonFinder-network:
     driver: bridge
