@@ -1,5 +1,5 @@
-from src.models.items import Items
-from src.scrapper import AbstractScrapper
+from app.models.items import Items
+from app.scrapper import AbstractScrapper
 
 
 class ItemScrapper(AbstractScrapper):
@@ -32,3 +32,9 @@ class ItemScrapper(AbstractScrapper):
             {"_index": Items.parse_index().get("name"), "_source": item.dump()}
             for item in self.items
         ]
+
+
+if __name__ == "__main__":
+    url = "https://enterthegungeon.gamepedia.com/Items"
+    scrapper = ItemScrapper(url)
+    scrapper.get_data()

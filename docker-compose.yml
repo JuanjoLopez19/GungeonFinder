@@ -1,15 +1,32 @@
 services:
   elasticsearch:
-    container_name: ${PROJECT_NAME}_elastic
+    container_name: gungeonFinder_elastic
     image: elasticsearch:8.14.1
     environment:
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      ELASTIC_PASSWORD: "VvVZiNDR7s4nHajE7x90"
       ES_JAVA_OPTS: "-Xmx2g -Xms2g"
     ports:
-      - ${ELASTIC_PORT}:9200
+      - 9200:9200
     volumes:
       - ./docker/elastic/elastic.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - elastic-data:/usr/share/elasticsearch/data
+    networks:
+      - gungeonFinder-network
+
+  app:
+    container_name: gungeonFinder_app
+    build: ./src
+    depends_on:
+      - elasticsearch
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix # Mount the X11 socket
+    environment:
+      DISPLAY: ${DISPLAY}
+      ELASTIC_PORT: "9200"
+      ELASTIC_HOST: "elasticsearch"
+      ELASTIC_PASSWORD: "VvVZiNDR7s4nHajE7x90"
+      ELASTIC_USER: "elastic"
+
     networks:
       - gungeonFinder-network
 

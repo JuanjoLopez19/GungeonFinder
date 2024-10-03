@@ -1,10 +1,10 @@
 import bs4
 from bs4 import ResultSet
 
-from src.models.Synergies import Synergies
-from src.models.Guns import Guns
-from src.models.items import Items
-from src.scrapper import AbstractScrapper
+from app.models.Synergies import Synergies
+from app.models.Guns import Guns
+from app.models.items import Items
+from app.scrapper import AbstractScrapper
 
 
 class SynergiesScrapper(AbstractScrapper):
@@ -40,3 +40,9 @@ class SynergiesScrapper(AbstractScrapper):
             {"_index": Synergies.parse_index().get("name"), "_source": item.dump()}
             for item in self.items
         ]
+
+
+if __name__ == "__main__":
+    url = "https://enterthegungeon.gamepedia.com/Synergies"
+    scrapper = SynergiesScrapper(url)
+    scrapper.get_data()

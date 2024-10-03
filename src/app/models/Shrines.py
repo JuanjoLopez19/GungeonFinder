@@ -6,13 +6,13 @@ class Shrines:
         if len(data) != 4:
             self.id = id
             self.name = data[0].text.strip().replace("\n", "")
-            self.icon = data[0].find("a").attrs["href"]
+            self.icon = data[0].find("a").attrs["href"].split(".png")[0] + ".png"
             self.description = data[1].text.strip().replace("\n", "")
             self.effect = self._parse_effect(data[3])
         else:
             self.id = id
             self.name = data[0].text.strip().replace("\n", "")
-            self.icon = data[0].find("a").attrs["href"]
+            self.icon = data[0].find("a").attrs["href"].split(".png")[0] + ".png"
             self.description = data[1].text.strip().replace("\n", "")
             self.effect = data[3].text.strip().replace("\n", "")
 

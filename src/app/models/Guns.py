@@ -6,7 +6,7 @@ class Guns:
 
         self.id = id
         self.name = data[1].text.strip().replace("\n", "")
-        self.icon = data[0].find("a").attrs["href"]
+        self.icon = data[0].find("a").attrs["href"].split(".png")[0] + ".png"
         self.notes = data[2].text.strip().replace("\n", "")
         if table_type == 0:
             self.quality = [
