@@ -41,4 +41,6 @@ git clone https://github.com/JuanjoLopez19/GungeonFinder
 docker compose up -d --build
 ```
 ### When deplying the two images at the sametime take in count that the elasticsearch service take a few time to initialize, maybe the GUI will show an error, just wait a few seconds and restart the GUI service to make the connection succesfully
+
+## The docker image can be found in my docker hub [page](https://hub.docker.com/r/juanjolopez19/gungeon-finder)
 Developed by @JuanjoLopez19
