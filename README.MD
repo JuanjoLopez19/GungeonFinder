@@ -35,17 +35,7 @@ xhost +local:root
 git clone https://github.com/JuanjoLopez19/GungeonFinder
 ```
 
-- Change credentials in the `docker/python/python.env` file
-
-- Add a `.env` for the docker-compose file with the following content:
-
-```bash
-PROJECT_NAME=""
-ELASTIC_PASSWORD=""
-ELASTIC_PORT=""
-```
-
-- Run the following command to start the application:
+- Run the following command on the `wsl command shell` to start the application:
 
 ```bash
 docker compose up -d --build

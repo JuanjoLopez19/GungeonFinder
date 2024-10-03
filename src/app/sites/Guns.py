@@ -1,3 +1,4 @@
+import json
 import bs4
 from bs4 import ResultSet
 
@@ -46,3 +47,6 @@ if __name__ == "__main__":
     url = "https://enterthegungeon.gamepedia.com/Guns"
     scrapper = GunsScrapper(url)
     scrapper.get_data()
+
+    with open("guns.json", "w") as f:
+        f.write(json.dumps([x.dump() for x in scrapper.items], indent=4))

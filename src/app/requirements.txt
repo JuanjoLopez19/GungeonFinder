@@ -1,9 +1,3 @@
 requests
 bs4
-python-dotenv
 elasticsearch
-tk
-kivy
-PyQt5
-# wxPython
-dearpygui

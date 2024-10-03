@@ -55,17 +55,28 @@ class Elastic:
     def bulk_insert(self, data: list[dict]):
         helpers.bulk(self.client, data)
 
-    def search(self, query: str = None):
+    def search(
+        self,
+        query: str = None,
+        fields: list[str] = ["name", "description", "notes"],
+        item_type: str = None,
+    ):
         """
         Search method
         """
-
+        type_parser = {
+            "gun": "guns",
+            "item": "items",
+            "synergy": "synergies",
+            "shrine": "shrines",
+        }
         res = self.client.search(
+            index=type_parser.get(item_type, None),
             body={
                 "query": {
                     "multi_match": {
                         "type": "bool_prefix",
-                        "fields": ["name", "description", "notes"],
+                        "fields": fields,
                         "query": query,
                     }
                 }
