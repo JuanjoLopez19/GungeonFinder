@@ -3,17 +3,24 @@ import logging
 import elasticsearch.helpers as helpers
 from elasticsearch import Elasticsearch
 
-from . import gunsScrapper, itemsScrapper, shrinesScrapper, synergiesScrapper
-from src.models.Guns import Guns
-from src.models.items import Items
-from src.models.Shrines import Shrines
-from src.models.Synergies import Synergies
+from . import (
+    gunsScrapper,
+    itemsScrapper,
+    shrinesScrapper,
+    synergiesScrapper,
+    elastic_config,
+)
+from app.models.Guns import Guns
+from app.models.items import Items
+from app.models.Shrines import Shrines
+from app.models.Synergies import Synergies
 
 
 class Elastic:
     def __init__(self):
         self.client = Elasticsearch(
-            "http://localhost:9200", http_auth=("elastic", "VvVZiNDR7s4nHajE7x90")
+            f"http://{elastic_config.get('host')}:{elastic_config.get('port')}",
+            http_auth=(elastic_config.get("user"), elastic_config.get("password")),
         )
         self.logger = logging.getLogger(__name__)
         self.setup_logger()
@@ -48,17 +55,28 @@ class Elastic:
     def bulk_insert(self, data: list[dict]):
         helpers.bulk(self.client, data)
 
-    def search(self, query: str = None):
+    def search(
+        self,
+        query: str = None,
+        fields: list[str] = ["name", "description", "notes"],
+        item_type: str = None,
+    ):
         """
         Search method
         """
-
+        type_parser = {
+            "gun": "guns",
+            "item": "items",
+            "synergy": "synergies",
+            "shrine": "shrines",
+        }
         res = self.client.search(
+            index=type_parser.get(item_type, None),
             body={
                 "query": {
                     "multi_match": {
                         "type": "bool_prefix",
-                        "fields": ["name", "description", "notes"],
+                        "fields": fields,
                         "query": query,
                     }
                 }

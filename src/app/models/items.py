@@ -4,7 +4,7 @@ class Items:
             raise ValueError("Data must have 6 elements")
 
         self.id = id
-        self.icon = data[0].find("a").attrs["href"]
+        self.icon = data[0].find("a").attrs["href"].split(".png")[0] + ".png"
         self.name = data[1].find("a").text
         self.type = data[2].text
         self.description = data[3].text
