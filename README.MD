@@ -40,5 +40,5 @@ git clone https://github.com/JuanjoLopez19/GungeonFinder
 ```bash
 docker compose up -d --build
 ```
-
+When deplying the two images at the sametime take in count that the elasticsearch service take a few time to initialize, maybe the GUI will show an error, just wait a few seconds and restart the GUI service to make the connection succesfully
 Developed by @JuanjoLopez19
